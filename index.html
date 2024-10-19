@@ -96,8 +96,23 @@
     </div>
 
     <div class="chart-container">
-      <h2>Analysis Chart</h2>
-      <img id="chart" alt="Chart will be displayed here">
+      <h2>Possession Percentage</h2>
+      <img id="possession-chart" alt="Possession Chart will be displayed here">
+    </div>
+
+    <div class="chart-container">
+      <h2>Shots on Target</h2>
+      <img id="shots-chart" alt="Shots on Target Chart will be displayed here">
+    </div>
+
+    <div class="chart-container">
+      <h2>Goals Over Time</h2>
+      <img id="goals-chart" alt="Goals Over Time Chart will be displayed here">
+    </div>
+
+    <div class="chart-container">
+      <h2>Passing Accuracy</h2>
+      <img id="passing-chart" alt="Passing Accuracy Chart will be displayed here">
     </div>
 
     <div class="footer">
@@ -112,13 +127,14 @@
       .then(data => {
         const analysisDiv = document.getElementById('analysis');
         analysisDiv.innerHTML = `
-          <p><strong>Goals Scored:</strong> ${data.goals_scored}</p>
-          <p><strong>Possession:</strong> ${data.possession}</p>
-          <p><strong>Shots on Target:</strong> ${data.shots_on_target}</p>
-          <p><strong>Passing Accuracy:</strong> ${data.passing_accuracy}</p>
-          <p><strong>Tackles Made:</strong> ${data.tackles_made}</p>
-          <p><strong>Corners Taken:</strong> ${data.corners_taken}</p>
-          <p><strong>Fouls Committed:</strong> ${data.fouls_committed}</p>
+          <p><strong>Goals Scored:</strong> Team A: ${data.goals_scored['Team A']}, Team B: ${data.goals_scored['Team B']}</p>
+          <p><strong>Possession:</strong> Team A: ${data.possession['Team A']}%, Team B: ${data.possession['Team B']}%</p>
+          <p><strong>Shots on Target:</strong> Team A: ${data.shots_on_target['Team A']}, Team B: ${data.shots_on_target['Team B']}</p>
+          <p><strong>Goals Over Time:</strong> Team A: ${data.goals_timeline['Team A']}, Team B: ${data.goals_timeline['Team B']}</p>
+          <p><strong>Passing Accuracy:</strong> Team A: ${data.passing_accuracy['Team A']}%, Team B: ${data.passing_accuracy['Team B']}%</p>
+          <p><strong>Tackles Made:</strong> Team A: ${data.tackles_made['Team A']}, Team B: ${data.tackles_made['Team B']}</p>
+          <p><strong>Corners Taken:</strong> Team A: ${data.corners_taken['Team A']}, Team B: ${data.corners_taken['Team B']}</p>
+          <p><strong>Fouls Committed:</strong> Team A: ${data.fouls_committed['Team A']}, Team B: ${data.fouls_committed['Team B']}</p>
         `;
       })
       .catch(error => {
@@ -126,16 +142,52 @@
         console.error('Error fetching analysis:', error);
       });
 
-    // Fetch chart image
-    fetch('http://127.0.0.1:5000/chart')
+    // Fetch and display possession chart
+    fetch('http://127.0.0.1:5000/chart/possession')
       .then(response => response.json())
       .then(data => {
-        const chartImg = document.getElementById('chart');
+        const chartImg = document.getElementById('possession-chart');
         chartImg.src = `data:image/png;base64,${data.chart}`;
       })
       .catch(error => {
-        document.getElementById('chart').alt = 'Failed to load chart.';
-        console.error('Error fetching chart:', error);
+        document.getElementById('possession-chart').alt = 'Failed to load possession chart.';
+        console.error('Error fetching possession chart:', error);
+      });
+
+    // Fetch and display shots on target chart
+    fetch('http://127.0.0.1:5000/chart/shots_on_target')
+      .then(response => response.json())
+      .then(data => {
+        const chartImg = document.getElementById('shots-chart');
+        chartImg.src = `data:image/png;base64,${data.chart}`;
+      })
+      .catch(error => {
+        document.getElementById('shots-chart').alt = 'Failed to load shots on target chart.';
+        console.error('Error fetching shots on target chart:', error);
+      });
+
+    // Fetch and display goals over time chart
+    fetch('http://127.0.0.1:5000/chart/goals_timeline')
+      .then(response => response.json())
+      .then(data => {
+        const chartImg = document.getElementById('goals-chart');
+        chartImg.src = `data:image/png;base64,${data.chart}`;
+      })
+      .catch(error => {
+        document.getElementById('goals-chart').alt = 'Failed to load goals over time chart.';
+        console.error('Error fetching goals over time chart:', error);
+      });
+
+    // Fetch and display passing accuracy chart
+    fetch('http://127.0.0.1:5000/chart/passing_accuracy')
+      .then(response => response.json())
+      .then(data => {
+        const chartImg = document.getElementById('passing-chart');
+        chartImg.src = `data:image/png;base64,${data.chart}`;
+      })
+      .catch(error => {
+        document.getElementById('passing-chart').alt = 'Failed to load passing accuracy chart.';
+        console.error('Error fetching passing accuracy chart:', error);
       });
   </script>
 </body>
