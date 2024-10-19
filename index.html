@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Football Analysis</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', sans-serif;
+      background-color: #f4f6f9;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2.5em;
+      color: #2c3e50;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
+
+    .analysis p {
+      font-size: 1.1em;
+      line-height: 1.6;
+      color: #34495e;
+    }
+
+    .analysis p strong {
+      color: #2980b9;
+    }
+
+    .chart-container {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .chart-container img {
+      max-width: 100%;
+      height: auto;
+      border: 2px solid #3498db;
+      border-radius: 5px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .loading {
+      text-align: center;
+      font-size: 1.2em;
+      color: #e74c3c;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 0.9em;
+      color: #95a5a6;
+    }
+
+    /* Media Queries */
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2em;
+      }
+
+      .container {
+        padding: 20px;
+      }
+
+      .chart-container img {
+        border: 1px solid #3498db;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Football Analysis</h1>
+
+    <div id="analysis" class="analysis">
+      <p class="loading">Loading analysis...</p>
+    </div>
+
+    <div class="chart-container">
+      <h2>Analysis Chart</h2>
+      <img id="chart" alt="Chart will be displayed here">
+    </div>
+
+    <div class="footer">
+      <p>Football stats powered by Python & Flask | 2024</p>
+    </div>
+  </div>
+
+  <script>
+    // Fetch football analysis data
+    fetch('http://127.0.0.1:5000/analysis')
+      .then(response => response.json())
+      .then(data => {
+        const analysisDiv = document.getElementById('analysis');
+        analysisDiv.innerHTML = `
+          <p><strong>Goals Scored:</strong> ${data.goals_scored}</p>
+          <p><strong>Possession:</strong> ${data.possession}</p>
+          <p><strong>Shots on Target:</strong> ${data.shots_on_target}</p>
+          <p><strong>Passing Accuracy:</strong> ${data.passing_accuracy}</p>
+          <p><strong>Tackles Made:</strong> ${data.tackles_made}</p>
+          <p><strong>Corners Taken:</strong> ${data.corners_taken}</p>
+          <p><strong>Fouls Committed:</strong> ${data.fouls_committed}</p>
+        `;
+      })
+      .catch(error => {
+        document.getElementById('analysis').innerHTML = '<p class="loading">Failed to load analysis data.</p>';
+        console.error('Error fetching analysis:', error);
+      });
+
+    // Fetch chart image
+    fetch('http://127.0.0.1:5000/chart')
+      .then(response => response.json())
+      .then(data => {
+        const chartImg = document.getElementById('chart');
+        chartImg.src = `data:image/png;base64,${data.chart}`;
+      })
+      .catch(error => {
+        document.getElementById('chart').alt = 'Failed to load chart.';
+        console.error('Error fetching chart:', error);
+      });
+  </script>
+</body>
+</html>
